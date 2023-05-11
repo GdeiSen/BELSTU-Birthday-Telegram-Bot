@@ -94,14 +94,17 @@ async def profile_command(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         outputHTML += f"👑 <b>Текущий статус: Администратор</b>\n\nХотим тебе напомнить, что ты являешься администратором, поэтому прогресс тебе недоступен\n\n"
         await update.effective_chat.send_message(outputHTML, parse_mode="HTML")
     else:
-        
-        outputHTML += f"<b>Текущий прогресс:</b>\n\n"
+        counter = 0
+        outputHTML += f"📊 <b>Текущий прогресс:</b>\n\n"
         for task in tasks:
             if await database.get_user_task(db_user[0], task[0]):
                 outputHTML += f"✅ <b>{task[1]}</b>\n"
+                counter += 1
             else:
                 outputHTML += f"❌ <b>{task[1]}</b>\n"
             outputHTML += f"{task[2]}\n{task[6]}\n\n"
+        if counter == 7:
+            outputHTML += f"🎉 <b>Поздравляем! Ты выполнил все задания!</b>\n\nНайди наших людей на 3 этаже.  И покажи свой прогресс в телеграмме. Твоя награда ждет тебя."
         outputHTML += f"Для получения информации о задании введи команду /tasks\n\nЕсли что-то станет не понятно введи команду /help\n\n"
         await update.effective_chat.send_message(outputHTML, parse_mode="HTML")
 
